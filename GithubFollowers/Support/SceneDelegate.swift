@@ -16,7 +16,51 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        /*
+         這裡是將window跟scene做連結的地方
+         window只有一個，但scene可以有很多個
+         最後要使用makeKeyAndVisible來讓window顯示
+         */
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+//        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
+        window = UIWindow(windowScene: windowScene)
+//        window?.windowScene = windowScene
+        window?.rootViewController = createTabBar()
+        window?.makeKeyAndVisible()
+        
+        configureNavigationBar()
+    }
+    
+    private func createSearchNC() -> UINavigationController {
+        let searchVC = SearchVC()
+        searchVC.title = "Search"
+        searchVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
+        let searchNC = UINavigationController(rootViewController: searchVC)
+        return searchNC
+    }
+    
+    private func createFavoritesNC() -> UINavigationController {
+        let favoritesVC = FavoritesVC()
+        favoritesVC.title = "Favorites"
+        favoritesVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
+        let favoritesNC = UINavigationController(rootViewController: favoritesVC)
+        return favoritesNC
+    }
+    
+    private func createTabBar() -> UITabBarController {
+        let tabbar = UITabBarController()
+//        let appearance = UITabBarAppearance()
+//        appearance.configureWithOpaqueBackground()
+//        appearance.selectionIndicatorTintColor = .systemGreen
+//        UITabBar.appearance().standardAppearance = appearance
+//        UITabBar.appearance().scrollEdgeAppearance = appearance
+        UITabBar.appearance().tintColor = .systemGreen
+        tabbar.viewControllers = [createSearchNC(), createFavoritesNC()]
+        return tabbar
+    }
+    
+    private func configureNavigationBar() {
+        UINavigationBar.appearance().tintColor = .systemGreen
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
