@@ -10,41 +10,59 @@ import UIKit
 class NetworkManager {
     static let shared = NetworkManager()
     private let baseURL = "https://api.github.com/users/"
-    let cache = NSCache<NSString, UIImage>()
+    private var cache = NSCache<NSString, UIImage>()
+    
+    private var baseGitHubUrl: URLComponents {
+        var urlComponents       = URLComponents()
+        urlComponents.scheme    = "https"
+        urlComponents.host      = "api.github.com"
+        return urlComponents
+    }
     
     private init() {}
     
     func getFollowers(for username: String, page: Int, completion: @escaping (Result<[Follower], GFError>) -> Void) {
-        let endPoint = baseURL + "\(username)/followers?per_page=100&page=\(page)"
+        let endpoint = baseURL + "\(username)/followers?per_page=100&page=\(page)"
+        fetchData(endpoint: endpoint, completion: completion)
+    }
+    
+    func getUserInfo(for username: String, completion: @escaping (Result<User, GFError>) -> Void) {
+        let endpoint = baseURL + "\(username)"
+        fetchData(endpoint: endpoint, completion: completion)
         
-        guard let url = URL(string: endPoint) else {
+    }
+    
+    private func fetchData<T: Decodable>(endpoint: String, completion: @escaping (Result<T, GFError>) -> Void) {
+        guard let url = URL(string: endpoint) else {
             completion(.failure(.invalidUsername))
             return
         }
         
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            
-            if let _ = error {
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration)
+        
+        let task = session.dataTask(with: url) { data, response, error in
+            //先處理 error
+            guard error == nil else {
                 completion(.failure(.unableToComplete))
                 return
             }
-            
-            guard let response = response as? HTTPURLResponse,
-                  response.statusCode == 200 else {
+            //再處理 response
+            guard let httpResponse = response as? HTTPURLResponse, (200..<300).contains(httpResponse.statusCode) else {
                 completion(.failure(.invalidResponse))
                 return
             }
-            
+            //再確認 data
             guard let data = data else {
                 completion(.failure(.invalidData))
                 return
             }
-            
+            //最後執行 decode
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let followers = try decoder.decode([Follower].self, from: data)
-                completion(.success(followers))
+                let a = try decoder.decode(T.self, from: data)
+                completion(.success(a))
             } catch {
                 completion(.failure(.invalidData))
             }

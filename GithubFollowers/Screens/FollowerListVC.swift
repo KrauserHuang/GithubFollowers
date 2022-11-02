@@ -76,7 +76,7 @@ class FollowerListVC: UIViewController {
         collectionView.dataSource = dataSource
         collectionView.register(FollowerCell.self, forCellWithReuseIdentifier: FollowerCell.reuseIdentifier)
     }
-    
+    // MARK: - old way for collectionView layout
     private func createThreeColumnFlowLayout() -> UICollectionViewFlowLayout {
         let width                     = view.bounds.width
         print("width:\(width)")
@@ -137,7 +137,7 @@ class FollowerListVC: UIViewController {
             self.dataSource.apply(snapshot, animatingDifferences: animated)
         }
     }
-    
+    // MARK: - new way to create collectionView layout
     private func createLayout() -> UICollectionViewLayout {
         //item
         let itemSize            = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1))
@@ -177,12 +177,8 @@ extension FollowerListVC: UICollectionViewDelegate {
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        var snapshot = dataSource.snapshot()
-//        guard let follower = dataSource.itemIdentifier(for: indexPath) else { return }
-//        print(#function)
-//        dump(follower)
-        let activeArray             = isSearching ? filteredFollowers : followers
-        let follower                = activeArray[indexPath.item]
+        
+        guard let follower = dataSource.itemIdentifier(for: indexPath) else { return }
         
         let userInfoVC              = UserInfoVC()
         userInfoVC.username         = follower.login
@@ -194,22 +190,19 @@ extension FollowerListVC: UICollectionViewDelegate {
 // MARK: - Search Delegate(SearchResultUpdating/SearchBar)
 extension FollowerListVC: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
-        #warning("Add search method")
         //從 searchBar 上的 text 去抓取要過濾的 followers，並且 searchBar 一定要輸入文字
-        // No.1 solution
-        guard let filter = searchController.searchBar.text, !filter.isEmpty else {
+        guard let filter = searchController.searchBar.text?.lowercased(), !filter.isEmpty else {
             updateSnapshot(on: followers, animated: true)
             return
         }
-        isSearching = true
-        filteredFollowers = followers.filter { $0.login.lowercased().contains(filter.lowercased()) }
-        // No.2 solution
-//        guard let filter = searchController.searchBar.text else { return }
-//        filteredFollowers = filter.isEmpty ? followers : followers.filter { $0.login.lowercased().contains(filter.lowercased()) }
+        filteredFollowers = followers.filter { $0.login.contains(filter) } // didSet 將會直接執行 updateSnapshot
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        isSearching = false
+        updateSnapshot(on: followers, animated: true)
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         updateSnapshot(on: followers, animated: true)
     }
 }
