@@ -7,6 +7,8 @@
 
 import UIKit
 
+fileprivate var containerView: UIView!
+
 extension UIViewController {
     func presentGFAlertOnMainThread(title: String, message: String, buttonTitle: String) {
         DispatchQueue.main.async {
@@ -15,5 +17,49 @@ extension UIViewController {
             alertVC.modalTransitionStyle   = .crossDissolve
             self.present(alertVC, animated: true)
         }
+    }
+    
+    func showLoadingView() {
+        containerView = UIView(frame: view.bounds)
+        view.addSubview(containerView)
+        
+        containerView.alpha             = 0.0
+        containerView.backgroundColor   = .systemBackground
+        
+        UIView.animate(withDuration: 0.25) {
+            containerView.alpha = 0.8
+        }
+        
+        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        containerView.addSubview(activityIndicatorView)
+        
+        activityIndicatorView.center    = containerView.center
+        activityIndicatorView.color     = .systemGreen
+        
+//        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+//
+//        NSLayoutConstraint.activate([
+//            activityIndicatorView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+//            activityIndicatorView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+//        ])
+        
+        activityIndicatorView.startAnimating()
+    }
+    
+    func hideLoadingView() {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.25) {
+                containerView.alpha = 0.0
+            } completion: { _ in
+                containerView.removeFromSuperview()
+                containerView = nil
+            }
+        }
+    }
+    
+    func showEmptyStateView(with message: String, in view: UIView) {
+        let emptyStateView = GFEmptyStateView(message: message)
+        emptyStateView.frame = view.bounds
+        view.addSubview(emptyStateView)
     }
 }

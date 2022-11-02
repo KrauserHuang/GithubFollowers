@@ -26,6 +26,7 @@ class SearchVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        usernameTextField.text = ""
         navigationController?.setNavigationBarHidden(true, animated: true) //每次都要呼叫的，只放viewDidLoad重複進同個畫面就會失效
     }
     
