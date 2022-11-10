@@ -36,6 +36,8 @@
 		4FC40586290A8D8900419AC8 /* FavoritesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC40585290A8D8900419AC8 /* FavoritesVC.swift */; };
 		4FD0BD442910CF7A00475792 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0BD432910CF7A00475792 /* CacheManager.swift */; };
 		4FD0BD4C2911219500475792 /* GFEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD0BD4B2911219500475792 /* GFEmptyStateView.swift */; };
+		4FEC1725291CA9470079A9A1 /* GFItemInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEC1724291CA9470079A9A1 /* GFItemInfoView.swift */; };
+		4FEC1727291CD0A50079A9A1 /* GFItemInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEC1726291CD0A50079A9A1 /* GFItemInfoVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +72,8 @@
 		4FC40585290A8D8900419AC8 /* FavoritesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesVC.swift; sourceTree = "<group>"; };
 		4FD0BD432910CF7A00475792 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		4FD0BD4B2911219500475792 /* GFEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GFEmptyStateView.swift; sourceTree = "<group>"; };
+		4FEC1724291CA9470079A9A1 /* GFItemInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GFItemInfoView.swift; sourceTree = "<group>"; };
+		4FEC1726291CD0A50079A9A1 /* GFItemInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GFItemInfoVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +231,7 @@
 			children = (
 				4F202D22290BDFD400888C94 /* GFAlertVC.swift */,
 				4F1B7AAD29136CAB009B5B8D /* GFUserInfoHeaderVC.swift */,
+				4FEC1726291CD0A50079A9A1 /* GFItemInfoVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -244,6 +249,7 @@
 			children = (
 				4F71EBBF290D18910034D347 /* GFAlertView.swift */,
 				4FD0BD4B2911219500475792 /* GFEmptyStateView.swift */,
+				4FEC1724291CA9470079A9A1 /* GFItemInfoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -320,6 +326,7 @@
 			files = (
 				4F71EBBA290D106B0034D347 /* UIViewController+Extension.swift in Sources */,
 				4F5CC17A290E60C80048254A /* ErrorMessage.swift in Sources */,
+				4FEC1725291CA9470079A9A1 /* GFItemInfoView.swift in Sources */,
 				4FB5ECB2290F70C200F1BBD4 /* UICollectionViewCell+Extension.swift in Sources */,
 				4FB5ECAE290F66A400F1BBD4 /* GFAvatarImageView.swift in Sources */,
 				4F5CC172290E2E5C0048254A /* Follower.swift in Sources */,
@@ -344,6 +351,7 @@
 				4FC40572290A7ABE00419AC8 /* SceneDelegate.swift in Sources */,
 				4F202D21290BDF6D00888C94 /* GFBodyLabel.swift in Sources */,
 				4F96356129124E4E00D85A27 /* UserInfoVC.swift in Sources */,
+				4FEC1727291CD0A50079A9A1 /* GFItemInfoVC.swift in Sources */,
 				4F1B7AB229137174009B5B8D /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
