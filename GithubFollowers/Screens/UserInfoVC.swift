@@ -19,7 +19,6 @@ class UserInfoVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         configureViewController()
         getUserInfo()
         layoutUI()
@@ -43,7 +42,8 @@ class UserInfoVC: UIViewController {
 //                dump(user)
                 DispatchQueue.main.async {
                     self.addChildVC(from: GFUserInfoHeaderVC(user: user), to: self.headerView)
-//                    self.addChild(from: GFUserInfoHeaderVC(user: user), to: self.headerView)
+                    self.addChildVC(from: GFRepoItemVC(user: user), to: self.itemViewOne)
+                    self.addChildVC(from: GFFollowerItemVC(user: user), to: self.itemViewTwo)
                 }
             case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "OK")
@@ -65,9 +65,6 @@ class UserInfoVC: UIViewController {
                 itemView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding)
             ])
         }
-        
-        itemViewOne.backgroundColor = .systemPink
-        itemViewTwo.backgroundColor = .systemBlue
         
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
