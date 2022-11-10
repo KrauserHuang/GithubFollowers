@@ -62,4 +62,19 @@ extension UIViewController {
         emptyStateView.frame = view.bounds
         view.addSubview(emptyStateView)
     }
+    
+    func addChildVC(from child: UIViewController, to containerView: UIView) {
+        addChild(child)
+        containerView.addSubview(child.view)
+        child.didMove(toParent: self)
+    }
+    
+    func removeChildVC() {
+        
+        guard parent != nil else { return }
+        
+        willMove(toParent: nil)
+        view.removeFromSuperview()
+        removeFromParent()
+    }
 }

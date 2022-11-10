@@ -10,7 +10,7 @@ import UIKit
 class NetworkManager {
     static let shared = NetworkManager()
     private let baseURL = "https://api.github.com/users/"
-    private var cache = NSCache<NSString, UIImage>()
+    var cache = NSCache<NSString, UIImage>()
     
     private var baseGitHubUrl: URLComponents {
         var urlComponents       = URLComponents()
