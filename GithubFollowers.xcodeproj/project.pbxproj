@@ -40,6 +40,7 @@
 		4FEC1727291CD0A50079A9A1 /* GFItemInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEC1726291CD0A50079A9A1 /* GFItemInfoVC.swift */; };
 		4FEC1729291CDA9A0079A9A1 /* GFRepoItemVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEC1728291CDA9A0079A9A1 /* GFRepoItemVC.swift */; };
 		4FEC172B291CDC890079A9A1 /* GFFollowerItemVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEC172A291CDC890079A9A1 /* GFFollowerItemVC.swift */; };
+		4FF4E6D0291DF2E300323BE8 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF4E6CF291DF2E200323BE8 /* Date+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		4FEC1726291CD0A50079A9A1 /* GFItemInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GFItemInfoVC.swift; sourceTree = "<group>"; };
 		4FEC1728291CDA9A0079A9A1 /* GFRepoItemVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GFRepoItemVC.swift; sourceTree = "<group>"; };
 		4FEC172A291CDC890079A9A1 /* GFFollowerItemVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GFFollowerItemVC.swift; sourceTree = "<group>"; };
+		4FF4E6CF291DF2E200323BE8 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,7 @@
 				4F202D1A290BB91500888C94 /* String+Extension.swift */,
 				4FB5ECAF290F66DA00F1BBD4 /* UITableViewCell+Extension.swift */,
 				4FB5ECB1290F70C200F1BBD4 /* UICollectionViewCell+Extension.swift */,
+				4FF4E6CF291DF2E200323BE8 /* Date+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -194,11 +197,11 @@
 			isa = PBXGroup;
 			children = (
 				4F5CC178290E60B10048254A /* Utilities */,
-				4F5CC175290E51680048254A /* Managers */,
+				4F71EBBB290D18070034D347 /* Extensions */,
 				4F5CC170290E2E3A0048254A /* Model */,
+				4F5CC175290E51680048254A /* Managers */,
 				4F71EBBD290D18320034D347 /* Custom Views */,
 				4F71EBBC290D181E0034D347 /* Screens */,
-				4F71EBBB290D18070034D347 /* Extensions */,
 				4F71EBBE290D186F0034D347 /* Support */,
 			);
 			path = GithubFollowers;
@@ -359,6 +362,7 @@
 				4FEC172B291CDC890079A9A1 /* GFFollowerItemVC.swift in Sources */,
 				4F5CC174290E2E640048254A /* User.swift in Sources */,
 				4FB5ECAC290F668C00F1BBD4 /* FollowerCell.swift in Sources */,
+				4FF4E6D0291DF2E300323BE8 /* Date+Extension.swift in Sources */,
 				4FC40570290A7ABE00419AC8 /* AppDelegate.swift in Sources */,
 				4F71EBC0290D18910034D347 /* GFAlertView.swift in Sources */,
 				4F202D1F290BDE6A00888C94 /* GFTitleLabel.swift in Sources */,
