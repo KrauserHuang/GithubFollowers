@@ -43,7 +43,7 @@ class FollowerListVC: UIViewController {
         configureViewController()
         configureSearchController()
         configureCollectionView()
-        getFollowers()
+        getFollowers(username: username, page: page)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,6 +54,8 @@ class FollowerListVC: UIViewController {
     private func configureViewController() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
+        let addButton                      = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        navigationItem.rightBarButtonItem   = addButton
     }
     
     private func configureSearchController() {
@@ -92,7 +94,7 @@ class FollowerListVC: UIViewController {
         return flowLayout
     }
     
-    private func getFollowers() {
+    private func getFollowers(username: String, page: Int) {
         showLoadingView()
         NetworkManager.shared.getFollowers(for: username, page: page) { [weak self] result in
             
@@ -155,6 +157,9 @@ class FollowerListVC: UIViewController {
         
         return layout
     }
+    @objc func addButtonTapped() {
+        print("Adddddd")
+    }
 }
 // MARK: - CollectionView Delegate
 extension FollowerListVC: UICollectionViewDelegate {
@@ -173,7 +178,7 @@ extension FollowerListVC: UICollectionViewDelegate {
         
         if offsetY > contentHeight - height {
             page += 1
-            getFollowers()
+            getFollowers(username: username, page: page)
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -182,6 +187,7 @@ extension FollowerListVC: UICollectionViewDelegate {
         
         let userInfoVC              = UserInfoVC()
         userInfoVC.username         = follower.login
+        userInfoVC.delegate         = self
         let navigationController    = UINavigationController(rootViewController: userInfoVC)
         
         present(navigationController, animated: true)
@@ -204,5 +210,27 @@ extension FollowerListVC: UISearchResultsUpdating, UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         updateSnapshot(on: followers, animated: true)
+    }
+}
+
+extension FollowerListVC: UserInfoVCDelegate {
+    func didRequestFollowers(for username: String) {
+        self.username   = username
+        title           = username
+        page            = 1
+        followers.removeAll()
+        filteredFollowers.removeAll()
+//        collectionView.setContentOffset(.zero, animated: true)
+//        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+        updateSnapshot(on: followers)
+        
+        if isSearching {
+            navigationItem.searchController?.searchBar.text = ""
+            navigationItem.searchController?.isActive = false
+            navigationItem.searchController?.dismiss(animated: false)
+            isSearching = false
+        }
+        
+        getFollowers(username: username, page: page)
     }
 }

@@ -6,6 +6,11 @@
 //
 
 import UIKit
+import SafariServices
+
+protocol UserInfoVCDelegate: AnyObject {
+    func didRequestFollowers(for username: String)
+}
 
 class UserInfoVC: UIViewController {
     
@@ -16,6 +21,7 @@ class UserInfoVC: UIViewController {
     let dateLabel           = GFBodyLabel(textAlignment: .center)
     
     var username: String!
+    weak var delegate: UserInfoVCDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,15 +48,26 @@ class UserInfoVC: UIViewController {
             case .success(let user):
 //                dump(user)
                 DispatchQueue.main.async {
-                    self.addChildVC(from: GFUserInfoHeaderVC(user: user), to: self.headerView)
-                    self.addChildVC(from: GFRepoItemVC(user: user), to: self.itemViewOne)
-                    self.addChildVC(from: GFFollowerItemVC(user: user), to: self.itemViewTwo)
-                    self.dateLabel.text = "Github since \(user.createdAt.convertDateToDisplayString())"
+                    self.configureUIElements(for: user)
                 }
             case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "OK")
             }
         }
+    }
+    
+    private func configureUIElements(for user: User) {
+        
+        let repoItemVC = GFRepoItemVC(user: user)
+        repoItemVC.delegate = self
+        
+        let followerItemVC = GFFollowerItemVC(user: user)
+        followerItemVC.delegate = self
+        
+        self.addChildVC(from: repoItemVC, to: self.itemViewOne)
+        self.addChildVC(from: followerItemVC, to: self.itemViewTwo)
+        self.addChildVC(from: GFUserInfoHeaderVC(user: user), to: self.headerView)
+        self.dateLabel.text = "Github since \(user.createdAt.convertDateToDisplayString())"
     }
     
     private func layoutUI() {
@@ -95,5 +112,24 @@ class UserInfoVC: UIViewController {
         containerView.addSubview(childVC.view)
         childVC.view.frame = containerView.bounds
         childVC.didMove(toParent: self)
+    }
+}
+
+extension UserInfoVC: GFItemInfoVCDelegate {
+    func didTapGithubProfile(for user: User) {
+        guard let url = URL(string: user.htmlUrl) else {
+            presentGFAlertOnMainThread(title: "Invalid URL", message: "The url attached to this user is invalid.", buttonTitle: "OK")
+            return
+        }
+        openSafariVC(with: url)
+    }
+    
+    func didTapGetFollowers(for user: User) {
+        guard user.followers != 0 else {
+            presentGFAlertOnMainThread(title: "No followers", message: "This user has no followers. What a shame 😞.", buttonTitle: "So sad")
+            return
+        }
+        delegate?.didRequestFollowers(for: user.login)
+        dismissVC()
     }
 }
