@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F18E9D12923CA860090E128 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F18E9D02923CA860090E128 /* PersistenceManager.swift */; };
 		4F1B7AAE29136CAB009B5B8D /* GFUserInfoHeaderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B7AAD29136CAB009B5B8D /* GFUserInfoHeaderVC.swift */; };
 		4F1B7AB029136CC4009B5B8D /* GFSecondaryTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B7AAF29136CC4009B5B8D /* GFSecondaryTitleLabel.swift */; };
 		4F1B7AB229137174009B5B8D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B7AB129137174009B5B8D /* Constants.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F18E9D02923CA860090E128 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		4F1B7AAD29136CAB009B5B8D /* GFUserInfoHeaderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GFUserInfoHeaderVC.swift; sourceTree = "<group>"; };
 		4F1B7AAF29136CC4009B5B8D /* GFSecondaryTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GFSecondaryTitleLabel.swift; sourceTree = "<group>"; };
 		4F1B7AB129137174009B5B8D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			children = (
 				4F5CC176290E51860048254A /* NetworkManager.swift */,
 				4FD0BD432910CF7A00475792 /* CacheManager.swift */,
+				4F18E9D02923CA860090E128 /* PersistenceManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -350,6 +353,7 @@
 				4F202D19290B7DDC00888C94 /* GFTextField.swift in Sources */,
 				4FD0BD442910CF7A00475792 /* CacheManager.swift in Sources */,
 				4F202D1B290BB91500888C94 /* String+Extension.swift in Sources */,
+				4F18E9D12923CA860090E128 /* PersistenceManager.swift in Sources */,
 				4F5CC177290E51860048254A /* NetworkManager.swift in Sources */,
 				4F1B7AB029136CC4009B5B8D /* GFSecondaryTitleLabel.swift in Sources */,
 				4FC40586290A8D8900419AC8 /* FavoritesVC.swift in Sources */,
