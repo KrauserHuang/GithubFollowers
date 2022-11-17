@@ -147,9 +147,7 @@ class FavoritesVC: UIViewController {
 extension FavoritesVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let favorite  = dataSource.itemIdentifier(for: indexPath) else { return }
-        let destVC          = FollowerListVC()
-        destVC.username     = favorite.login
-        destVC.title        = favorite.login
+        let destVC          = FollowerListVC(username: favorite.login)
         
         navigationController?.pushViewController(destVC, animated: true)
     }

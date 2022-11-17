@@ -35,7 +35,17 @@ class FollowerListVC: UIViewController {
             updateSnapshot(on: filteredFollowers, animated: true)
         }
     }
-
+    //每次進入這個畫面就要初始化的動作(指定username/title這個動作應該由VC自己本身做)
+    init(username: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.username   = username
+        title           = username
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureViewController()
