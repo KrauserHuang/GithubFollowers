@@ -8,7 +8,7 @@
 import Foundation
 
 struct Follower: Codable {
-    let uuid = UUID().uuidString
+//    let uuid = UUID().uuidString
     var login: String
     var avatarUrl: String
     

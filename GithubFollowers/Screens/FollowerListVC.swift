@@ -7,13 +7,11 @@
 
 import UIKit
 
+enum Section {
+    case main
+}
+
 class FollowerListVC: UIViewController {
-    
-    
-    
-    enum Section {
-        case main
-    }
     
     var username: String!
     var collectionView: UICollectionView!
@@ -124,7 +122,7 @@ class FollowerListVC: UIViewController {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FollowerCell.reuseIdentifier, for: indexPath) as! FollowerCell
             
             cell.avatarImageView.image = cell.avatarImageView.placeholderImage
-            cell.set(follower: itemIdentifier)
+            cell.set(with: itemIdentifier)
             
             return cell
         }
@@ -158,7 +156,28 @@ class FollowerListVC: UIViewController {
         return layout
     }
     @objc func addButtonTapped() {
-        print("Adddddd")
+        showLoadingView()
+        
+        NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
+            guard let self = self else { return }
+            self.hideLoadingView()
+            switch result {
+            case .success(let user):
+                let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl) //將該名使用者轉成 Follower 型別(因為接下來要把他加進我的最愛)
+                
+                PersistenceManager.updateWith(favorite: favorite, actionType: .add) { [weak self] error in
+                    guard let self = self else { return }
+                    
+                    guard let error = error else {
+                        self.presentGFAlertOnMainThread(title: "Success!", message: "You have successfully favorited this user 🥳.", buttonTitle: "Hurray!")
+                        return
+                    }
+                    self.presentGFAlertOnMainThread(title: "Something went wrong...", message: error.rawValue, buttonTitle: "OK")
+                }
+            case .failure(let error):
+                self.presentGFAlertOnMainThread(title: "Something went wrong...", message: error.rawValue, buttonTitle: "OK")
+            }
+        }
     }
 }
 // MARK: - CollectionView Delegate
