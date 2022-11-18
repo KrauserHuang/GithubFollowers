@@ -18,6 +18,8 @@ class FollowerListVC: UIViewController {
     var page                = 1
     var hasMoreFollowers    = true
     var isSearching         = false
+    var lastScrollPosition: CGFloat = 0
+    var isLoadingMoreFollower = false
     
     typealias DataSource = UICollectionViewDiffableDataSource<Section, Follower>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Follower>
@@ -69,7 +71,7 @@ class FollowerListVC: UIViewController {
     private func configureSearchController() {
         let searchController                    = UISearchController()
         searchController.searchResultsUpdater   = self
-        searchController.searchBar.delegate     = self
+//        searchController.searchBar.delegate     = self
         searchController.searchBar.placeholder  = "Please enter username"
 //        searchController.obscuresBackgroundDuringPresentation = true //true: obscure(有遮罩), false: unobscure(無遮罩)
 //        searchController.automaticallyShowsSearchResultsController = true
@@ -79,35 +81,23 @@ class FollowerListVC: UIViewController {
     }
     
     private func configureCollectionView() {
-//        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createThreeColumnFlowLayout())
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.createThreeColumnFlowLayout(in: view)
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)
+//        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = dataSource
         collectionView.register(FollowerCell.self, forCellWithReuseIdentifier: FollowerCell.reuseIdentifier)
     }
-    // MARK: - old way for collectionView layout
-    private func createThreeColumnFlowLayout() -> UICollectionViewFlowLayout {
-        let width                     = view.bounds.width
-        print("width:\(width)")
-        let padding: CGFloat          = 12
-        let itemInterSpacing: CGFloat = 10
-        let availableWidth            = width - (padding * 2) - (itemInterSpacing * 2)
-        print("availableWidth:\(availableWidth)")
-        let itemWidth                 = availableWidth / 3
-        print("itemWidth:\(itemWidth)")
-        let flowLayout                = UICollectionViewFlowLayout()
-        flowLayout.sectionInset       = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-        flowLayout.itemSize           = CGSize(width: itemWidth, height: itemWidth + 40)
-        return flowLayout
-    }
     
     private func getFollowers(username: String, page: Int) {
         showLoadingView()
+        isLoadingMoreFollower = true
+        
         NetworkManager.shared.getFollowers(for: username, page: page) { [weak self] result in
             
             guard let self = self else { return }
-//            #warning("Remeber to call hideLoadingView")
             self.hideLoadingView()
             
             switch result {
@@ -118,12 +108,14 @@ class FollowerListVC: UIViewController {
                     DispatchQueue.main.async {
                         self.showEmptyStateView(with: "This user doesn't have any followers. Go follow them 😀.",
                                                 in: self.view)
+                        self.navigationItem.searchController?.searchBar.isHidden = true
                     }
                 }
-//                dump(followers)
             case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Bad Stuff Happened", message: error.rawValue, buttonTitle: "OK")
             }
+            
+            self.isLoadingMoreFollower = false
         }
     }
     
@@ -193,7 +185,7 @@ class FollowerListVC: UIViewController {
 // MARK: - CollectionView Delegate
 extension FollowerListVC: UICollectionViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard hasMoreFollowers else { return }
+        guard hasMoreFollowers, !isLoadingMoreFollower else { return }
         let offsetY         = scrollView.contentOffset.y
         let contentHeight   = scrollView.contentSize.height
         let height          = scrollView.frame.height
@@ -221,11 +213,24 @@ extension FollowerListVC: UICollectionViewDelegate {
         
         present(navigationController, animated: true)
     }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        lastScrollPosition = scrollView.contentOffset.y
+    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if lastScrollPosition < scrollView.contentOffset.y {
+            navigationItem.hidesSearchBarWhenScrolling = true
+        } else if lastScrollPosition > scrollView.contentOffset.y {
+            navigationItem.hidesSearchBarWhenScrolling = false
+        }
+    }
 }
 // MARK: - Search Delegate(SearchResultUpdating/SearchBar)
-extension FollowerListVC: UISearchResultsUpdating, UISearchBarDelegate {
+//extension FollowerListVC: UISearchResultsUpdating, UISearchBarDelegate {
+extension FollowerListVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         //從 searchBar 上的 text 去抓取要過濾的 followers，並且 searchBar 一定要輸入文字
+        //這一段在你按下 searchBar 的 cancel 按鈕時也會執行
         guard let filter = searchController.searchBar.text?.lowercased(), !filter.isEmpty else {
             updateSnapshot(on: followers, animated: true)
             return
@@ -233,13 +238,13 @@ extension FollowerListVC: UISearchResultsUpdating, UISearchBarDelegate {
         filteredFollowers = followers.filter { $0.login.contains(filter) } // didSet 將會直接執行 updateSnapshot
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        updateSnapshot(on: followers, animated: true)
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        updateSnapshot(on: followers, animated: true)
-    }
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        updateSnapshot(on: followers, animated: true)
+//    }
+//
+//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+//        updateSnapshot(on: followers, animated: true)
+//    }
 }
 
 extension FollowerListVC: UserInfoVCDelegate {

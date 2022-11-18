@@ -37,13 +37,6 @@ extension UIViewController {
         activityIndicatorView.center    = containerView.center
         activityIndicatorView.color     = .systemGreen
         
-//        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        NSLayoutConstraint.activate([
-//            activityIndicatorView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-//            activityIndicatorView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
-//        ])
-        
         activityIndicatorView.startAnimating()
     }
     

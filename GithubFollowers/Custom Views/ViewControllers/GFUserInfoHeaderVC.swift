@@ -87,7 +87,7 @@ class GFUserInfoHeaderVC: UIViewController {
         avatarImageView.setImage(from: user.avatarUrl)
         usernameLabel.text          = user.login
         nameLabel.text              = user.name ?? ""
-        locationImageView.image     = UIImage(systemName: SFSymbol.location)
+        locationImageView.image     = SFSymbol.location
         locationImageView.tintColor = .secondaryLabel
         locationLabel.text          = user.location ?? "No location"
         bioLabel.text               = user.bio ?? "No bio"

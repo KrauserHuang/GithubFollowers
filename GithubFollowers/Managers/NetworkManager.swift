@@ -80,7 +80,10 @@ class NetworkManager {
             return
         }
         
-        guard let url = URL(string: urlString) else { return }
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
 
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             

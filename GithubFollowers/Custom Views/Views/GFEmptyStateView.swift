@@ -31,11 +31,15 @@ class GFEmptyStateView: UIView {
         addSubview(imageView)
         
         titleLabel.numberOfLines    = 3
-        imageView.image             = UIImage(named: "empty-state-logo")
+        imageView.image             = Images.emptyStateLogo
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
+        //在較小機型特別改動 UI 元件的 constraint
+        let labelCenterYConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8Zoomed ? -80 : -150
+        let logoBottomConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8Zoomed ? 80 : 40
+        
         NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -150),
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: labelCenterYConstant),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             titleLabel.heightAnchor.constraint(equalToConstant: 200),
@@ -43,7 +47,7 @@ class GFEmptyStateView: UIView {
             imageView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.3),
             imageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1.3),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 170),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 40)
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: logoBottomConstant)
         ])
     }
 }
