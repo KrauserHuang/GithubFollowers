@@ -7,11 +7,6 @@
 
 import UIKit
 
-protocol GFItemInfoVCDelegate: AnyObject {
-    func didTapGithubProfile(for user: User)
-    func didTapGetFollowers(for user: User)
-}
-
 class GFItemInfoVC: UIViewController {
     //作為parentVC, 這邊不是先做設定，而是把排版、加入畫面這種repetitive動作先給寫好，在依各個childVC去做設定
     let stackView       = UIStackView()
@@ -20,7 +15,6 @@ class GFItemInfoVC: UIViewController {
     let actionButton    = GFButton()
     
     var user: User!
-    weak var delegate: GFItemInfoVCDelegate?
     
     init(user: User) {
         super.init(nibName: nil, bundle: nil)
@@ -54,12 +48,9 @@ class GFItemInfoVC: UIViewController {
     }
     
     private func layoutUI() {
-        view.addSubview(stackView)
-        view.addSubview(actionButton)
+        view.addSubviews(stackView, actionButton)
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-//        itemInfoViewOne.translatesAutoresizingMaskIntoConstraints = false
-//        itemInfoViewTwo.translatesAutoresizingMaskIntoConstraints = false
         let padding: CGFloat = 20
         
         NSLayoutConstraint.activate([

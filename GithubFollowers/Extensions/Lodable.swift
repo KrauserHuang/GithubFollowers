@@ -17,26 +17,26 @@ protocol Lodable {
 
 // extend protocol Lodable where 'Self' is of type 'UIViewController'
 extension Lodable where Self: UIViewController {
-//    mutating func showLoadingView() {
-//        containerView = UIView(frame: view.bounds)
-//        view.addSubview(containerView)
-//        
-//        containerView.alpha             = 0.0
-//        containerView.backgroundColor   = .systemBackground
-//        
-//        UIView.animate(withDuration: 0.25) { [self] in
-//            containerView.alpha = 0.8
-//        }
-//        
-//        let activityIndicatorView = UIActivityIndicatorView(style: .large)
-//        containerView.addSubview(activityIndicatorView)
-//        
-//        activityIndicatorView.center    = containerView.center
-//        activityIndicatorView.color     = .systemGreen
-//        
-//        activityIndicatorView.startAnimating()
-//    }
-//    
+    mutating func showLoadingView() {
+        containerView = UIView(frame: view.bounds) //背景半黑
+        view.addSubview(containerView)
+        
+        containerView.alpha             = 0.0
+        containerView.backgroundColor   = .systemBackground
+        
+        UIView.animate(withDuration: 0.25) { [self] in
+            containerView.alpha = 0.8
+        }
+        
+        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        containerView.addSubview(activityIndicatorView)
+        
+        activityIndicatorView.center    = containerView.center
+        activityIndicatorView.color     = .systemGreen
+        
+        activityIndicatorView.startAnimating()
+    }
+    
 //    mutating func hideLoadingView() {
 //        DispatchQueue.main.async { [self] in
 //            UIView.animate(withDuration: 0.25) { [self] in
@@ -47,10 +47,10 @@ extension Lodable where Self: UIViewController {
 //            }
 //        }
 //    }
-//    
-//    func showEmptyStateView(with message: String, in view: UIView) {
-//        let emptyStateView = GFEmptyStateView(message: message)
-//        emptyStateView.frame = view.bounds
-//        view.addSubview(emptyStateView)
-//    }
+    
+    func showEmptyStateView(with message: String, in view: UIView) {
+        let emptyStateView = GFEmptyStateView(message: message)
+        emptyStateView.frame = view.bounds
+        view.addSubview(emptyStateView)
+    }
 }

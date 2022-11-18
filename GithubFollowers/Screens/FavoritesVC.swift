@@ -76,12 +76,6 @@ class FavoritesVC: UIViewController {
     private func configreTableView() {
         view.addSubview(tableView)
         tableView.frame = view.bounds
-//        NSLayoutConstraint.activate([
-//            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-//        ])
     }
     
     private func getFavorites() {

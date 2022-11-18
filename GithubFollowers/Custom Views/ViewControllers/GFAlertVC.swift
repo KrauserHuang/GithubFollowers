@@ -9,7 +9,6 @@ import UIKit
 
 class GFAlertVC: UIViewController {
     
-//    let containerView = UIView()
     let containerView = GFAlertView()
     let titleLabel    = GFTitleLabel(textAlignment: .center, fontSize: 20)
     let messageLabel  = GFBodyLabel(textAlignment: .center)
@@ -35,7 +34,7 @@ class GFAlertVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.75) //可以避開用rgb看不懂的問題
         configureContainerView()
         configureTitleLabel()
         configureActionButton()
@@ -44,11 +43,7 @@ class GFAlertVC: UIViewController {
     
     private func configureContainerView() {
         view.addSubview(containerView)
-//        containerView.translatesAutoresizingMaskIntoConstraints = false
-//        containerView.layer.cornerRadius = 16
-//        containerView.backgroundColor    = .systemBackground
-//        containerView.layer.borderWidth  = 2
-//        containerView.layer.borderColor  = UIColor.white.cgColor
+        containerView.addSubviews(titleLabel, actionButton, messageLabel)
         
         NSLayoutConstraint.activate([
             containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -59,7 +54,6 @@ class GFAlertVC: UIViewController {
     }
     
     private func configureTitleLabel() {
-        containerView.addSubview(titleLabel)
         titleLabel.text = alertTitle ?? "Something went wrong"
         
         NSLayoutConstraint.activate([
@@ -71,7 +65,6 @@ class GFAlertVC: UIViewController {
     }
     
     private func configureActionButton() {
-        containerView.addSubview(actionButton)
         actionButton.setTitle(buttonTitle ?? "OK", for: .normal)
         actionButton.addTarget(self,
                                action: #selector(dismissAlertVC),
@@ -89,7 +82,6 @@ class GFAlertVC: UIViewController {
     }
     
     private func configureMessageLabel() {
-        containerView.addSubview(messageLabel)
         messageLabel.text          = message ?? "No message here"
         messageLabel.numberOfLines = 4
         

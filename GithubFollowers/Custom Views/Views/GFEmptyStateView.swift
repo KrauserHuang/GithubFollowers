@@ -27,8 +27,7 @@ class GFEmptyStateView: UIView {
     }
     
     private func configure() {
-        addSubview(titleLabel)
-        addSubview(imageView)
+        addSubviews(titleLabel, imageView)
         
         titleLabel.numberOfLines    = 3
         imageView.image             = Images.emptyStateLogo

@@ -57,15 +57,8 @@ class UserInfoVC: UIViewController {
     }
     
     private func configureUIElements(for user: User) {
-        
-        let repoItemVC = GFRepoItemVC(user: user)
-        repoItemVC.delegate = self
-        
-        let followerItemVC = GFFollowerItemVC(user: user)
-        followerItemVC.delegate = self
-        
-        self.addChildVC(from: repoItemVC, to: self.itemViewOne)
-        self.addChildVC(from: followerItemVC, to: self.itemViewTwo)
+        self.addChildVC(from: GFRepoItemVC(user: user, delegate: self), to: self.itemViewOne)
+        self.addChildVC(from: GFFollowerItemVC(user: user, delegate: self), to: self.itemViewTwo)
         self.addChildVC(from: GFUserInfoHeaderVC(user: user), to: self.headerView)
         self.dateLabel.text = "Github since \(user.createdAt.convertDateToMonthYearFormat())"
     }
@@ -115,7 +108,26 @@ class UserInfoVC: UIViewController {
     }
 }
 
-extension UserInfoVC: GFItemInfoVCDelegate {
+//extension UserInfoVC: GFItemInfoVCDelegate {
+//    func didTapGithubProfile(for user: User) {
+//        guard let url = URL(string: user.htmlUrl) else {
+//            presentGFAlertOnMainThread(title: "Invalid URL", message: "The url attached to this user is invalid.", buttonTitle: "OK")
+//            return
+//        }
+//        openSafariVC(with: url)
+//    }
+//
+//    func didTapGetFollowers(for user: User) {
+//        guard user.followers != 0 else {
+//            presentGFAlertOnMainThread(title: "No followers", message: "This user has no followers. What a shame 😞.", buttonTitle: "So sad")
+//            return
+//        }
+//        delegate?.didRequestFollowers(for: user.login)
+//        dismissVC()
+//    }
+//}
+
+extension UserInfoVC: GFRepoItemVCDelegate {
     func didTapGithubProfile(for user: User) {
         guard let url = URL(string: user.htmlUrl) else {
             presentGFAlertOnMainThread(title: "Invalid URL", message: "The url attached to this user is invalid.", buttonTitle: "OK")
@@ -123,7 +135,9 @@ extension UserInfoVC: GFItemInfoVCDelegate {
         }
         openSafariVC(with: url)
     }
-    
+}
+
+extension UserInfoVC: GFFollowerItemVCDelegate {
     func didTapGetFollowers(for user: User) {
         guard user.followers != 0 else {
             presentGFAlertOnMainThread(title: "No followers", message: "This user has no followers. What a shame 😞.", buttonTitle: "So sad")

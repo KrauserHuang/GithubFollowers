@@ -30,21 +30,13 @@ class GFUserInfoHeaderVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addSubviews()
         layoutUI()
         configureUIElements()
     }
     
-    private func addSubviews() {
-        view.addSubview(avatarImageView)
-        view.addSubview(usernameLabel)
-        view.addSubview(nameLabel)
-        view.addSubview(locationLabel)
-        view.addSubview(locationImageView)
-        view.addSubview(bioLabel)
-    }
-    
     private func layoutUI() {
+        view.addSubviews(avatarImageView, usernameLabel, nameLabel, locationLabel, locationImageView, bioLabel)
+        
         let padding: CGFloat            = 20
         let textImagePadding: CGFloat   = 12
         locationImageView.translatesAutoresizingMaskIntoConstraints = false
