@@ -20,11 +20,11 @@ class GFButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     //可設定背景色/文字的初始化動作
-    init(backgroundColor: UIColor, title: String) {
-        super.init(frame: .zero)
+    // convenience initializer 的基本條件就是要先有 designated initializer，這裡是指 GFButton，所以遵從了 designated initializer 就可以使用他的屬性、方法(configure)
+    convenience init(backgroundColor: UIColor, title: String) {
+        self.init(frame: .zero)
         self.backgroundColor = backgroundColor
         self.setTitle(title, for: .normal)
-        configure()
     }
     //設定這個客製化按鈕基本元素
     private func configure() {

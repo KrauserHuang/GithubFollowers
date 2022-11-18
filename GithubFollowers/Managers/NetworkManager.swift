@@ -59,8 +59,9 @@ class NetworkManager {
             }
             //最後執行 decode
             do {
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let decoder                     = JSONDecoder()
+                decoder.keyDecodingStrategy     = .convertFromSnakeCase
+                decoder.dateDecodingStrategy    = .iso8601 //可將回傳的資料轉成這個Date顯示類型(所以資料型別要為Date)
                 let a = try decoder.decode(T.self, from: data)
                 completion(.success(a))
             } catch {
@@ -71,7 +72,7 @@ class NetworkManager {
         task.resume()
     }
     
-    func downloadImage(for urlString: String, completion: @escaping (UIImage) -> Void) {
+    func downloadImage(for urlString: String, completion: @escaping (UIImage?) -> Void) {
         
         let cacheKey = NSString(string: urlString)
         if let image = cache.object(forKey: cacheKey) {
@@ -83,10 +84,14 @@ class NetworkManager {
 
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             
-            guard error == nil else { return }
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else { return }
-            guard let data = data else { return }
-            guard let image = UIImage(data: data) else { return }
+            guard error == nil,
+                  let response = response as? HTTPURLResponse,
+                  response.statusCode == 200,
+                  let data = data,
+                  let image = UIImage(data: data) else {
+                completion(nil)
+                return
+            }
             
             self.cache.setObject(image, forKey: cacheKey)
             
