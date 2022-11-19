@@ -24,19 +24,18 @@ enum PersistenceManager {
     static func updateWith(favorite: Follower, actionType: PersistenceActionType, completed: @escaping (GFError?) -> Void) {
         retrieveFavorites { result in
             switch result {
-            case .success(let favorites): //取得 favorites 後就要進行新增(add)或刪減(remove)
-                var retrievedFavorites = favorites
+            case .success(var favorites): //取得 favorites 後就要進行新增(add)或刪減(remove)
                 switch actionType {
                 case .add: //確認該名使用者是否已經被加進list裏面，沒有才可以加
-                    guard !retrievedFavorites.contains(favorite) else {
+                    guard !favorites.contains(favorite) else {
                         completed(.alreadyInFavorites)
                         return
                     }
-                    retrievedFavorites.append(favorite)
+                    favorites.append(favorite)
                 case .remove:
-                    retrievedFavorites.removeAll { $0.login == favorite.login } //篩選要移除的使用者，對應完兩邊的 login(id)
+                    favorites.removeAll { $0.login == favorite.login } //篩選要移除的使用者，對應完兩邊的 login(id)
                 }
-                completed(save(favorites: retrievedFavorites)) //最後記得儲存到 UserDefaults
+                completed(save(favorites: favorites)) //最後記得儲存到 UserDefaults
             case .failure(let error):
                 completed(error) //這裡的 error 會回傳至 retrieveFavorites 內的 GFError，最後跑 .unableFavorite 錯誤訊息
             }

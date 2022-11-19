@@ -37,9 +37,9 @@ class FavoritesVC: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView           = UITableView()
         tableView.delegate      = self
-//        tableView.dataSource    = self
         tableView.rowHeight     = 80
         tableView.register(FavoriteCell.self, forCellReuseIdentifier: FavoriteCell.reuseIdentifier)
+        tableView.removeExcessCells()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -117,22 +117,20 @@ class FavoritesVC: UIViewController {
         
         dataSource.apply(snapshot, animatingDifferences: animated)
     }
-    
-//    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//      return true
-//    }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
         guard let favorite  = dataSource.itemIdentifier(for: indexPath) else { return }
-
-        var snapshot = dataSource.snapshot()
-        snapshot.deleteItems([favorite])
-        dataSource.apply(snapshot)
-
+        
         PersistenceManager.updateWith(favorite: favorite, actionType: .remove) { [weak self] error in
             guard let self = self else { return }
-            guard let error = error else { return }
+            guard let error = error else {
+                //當沒有錯誤時，favorite 會從 PersistenceManager 移除完成後，再從 UI 面下手，取得目前的 snapshot，刪除該 favorite 後再 apply 到 dataSource
+                var snapshot = self.dataSource.snapshot()
+                snapshot.deleteItems([favorite])
+                self.dataSource.apply(snapshot)
+                return
+            }
             self.presentGFAlertOnMainThread(title: "Something went wrong with the deletion", message: error.rawValue, buttonTitle: "OK")
         }
     }
