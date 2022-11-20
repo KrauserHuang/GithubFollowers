@@ -8,19 +8,24 @@
 import UIKit
 
 class NetworkManager {
-    static let shared = NetworkManager()
+    static let shared   = NetworkManager()
     private let baseURL = "https://api.github.com/users/"
-    var cache = NSCache<NSString, UIImage>()
+    var cache           = NSCache<NSString, UIImage>()
     
     private var baseGitHubUrl: URLComponents {
-        var urlComponents       = URLComponents()
-        urlComponents.scheme    = "https"
-        urlComponents.host      = "api.github.com"
+        var urlComponents           = URLComponents()
+        urlComponents.scheme        = "https"
+        urlComponents.host          = "api.github.com"
+        urlComponents.path          = "/user/"
+        urlComponents.queryItems    = [
+            URLQueryItem(name: "username", value: ""),
+            URLQueryItem(name: "page", value: "")
+        ]
         return urlComponents
     }
     
     private init() {}
-    
+    //https://api.github.com/users/\(username)/followers?per_page=100&page=\(page)
     func getFollowers(for username: String, page: Int, completion: @escaping (Result<[Follower], GFError>) -> Void) {
         let endpoint = baseURL + "\(username)/followers?per_page=100&page=\(page)"
         fetchData(endpoint: endpoint, completion: completion)
@@ -85,11 +90,11 @@ class NetworkManager {
             return
         }
 
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             
-            guard error == nil,
-                  let response = response as? HTTPURLResponse,
-                  response.statusCode == 200,
+            guard let self = self,
+                  error == nil,
+                  let response = response as? HTTPURLResponse, response.statusCode == 200,
                   let data = data,
                   let image = UIImage(data: data) else {
                 completion(nil)
@@ -97,10 +102,7 @@ class NetworkManager {
             }
             
             self.cache.setObject(image, forKey: cacheKey)
-            
-            DispatchQueue.main.async {
-                completion(image)
-            }
+            completion(image)
         }
         task.resume()
     }

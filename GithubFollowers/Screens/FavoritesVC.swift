@@ -27,6 +27,7 @@ class MyFavoriteDataSource: UITableViewDiffableDataSource<Section, Follower> {
         PersistenceManager.updateWith(favorite: favorite, actionType: .remove) { [weak self] error in
             guard let self = self else { return }
             guard let error = error else { return }
+            #warning("這裡不知道怎麼連動ViewController")
 //            self.presentGFAlertOnMainThread(title: "Something went wrong with the deletion", message: error.rawValue, buttonTitle: "OK")
         }
     }
@@ -71,6 +72,7 @@ class FavoritesVC: UIViewController {
     private func configureViewController() {
         view.backgroundColor    = .systemBackground
         title                   = "Favorites"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     private func configreTableView() {
@@ -80,23 +82,29 @@ class FavoritesVC: UIViewController {
     
     private func getFavorites() {
         showLoadingView()
+        
         PersistenceManager.retrieveFavorites { [weak self] result in
             guard let self = self else { return }
             self.hideLoadingView()
+            
             switch result {
             case .success(let favorites):
-                guard !favorites.isEmpty else {
-                    self.tableView.isHidden = true
-                    self.showEmptyStateView(with: "There is no any follower\n Please add some =]", in: self.view)
-                    return
-                }
-                self.favorites = favorites
-                self.tableView.isHidden = false
-                self.view.bringSubviewToFront(self.tableView)
+                self.updateUI(with: favorites)
             case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Something wrong with your favorites list", message: error.rawValue, buttonTitle: "OK")
             }
         }
+    }
+    
+    private func updateUI(with favorites: [Follower]) {
+        guard !favorites.isEmpty else {
+            self.tableView.isHidden = true
+            self.showEmptyStateView(with: "There is no any follower\n Please add some =]", in: self.view)
+            return
+        }
+        self.favorites = favorites
+        self.tableView.isHidden = false
+        self.view.bringSubviewToFront(self.tableView)
     }
     
     private func configureDataSource() -> DataSource {

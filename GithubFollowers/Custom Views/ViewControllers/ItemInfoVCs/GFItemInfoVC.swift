@@ -39,6 +39,11 @@ class GFItemInfoVC: UIViewController {
         view.backgroundColor    = .secondarySystemBackground
     }
     
+    private func configureActionButton() {
+        actionButton.addTarget(self, action: #selector(didTapActionButton(_:)), for: .touchUpInside)
+    }
+    @objc func didTapActionButton(_ sender: UIButton) {} //點擊動作這邊不做設定，交由各個 childVC 去做
+    
     private func configureStackView() {
         stackView.addArrangedSubview(itemInfoViewOne)
         stackView.addArrangedSubview(itemInfoViewTwo)
@@ -49,7 +54,6 @@ class GFItemInfoVC: UIViewController {
     
     private func layoutUI() {
         view.addSubviews(stackView, actionButton)
-        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         let padding: CGFloat = 20
         
@@ -65,9 +69,4 @@ class GFItemInfoVC: UIViewController {
             actionButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
-    
-    private func configureActionButton() {
-        actionButton.addTarget(self, action: #selector(didTapActionButton(_:)), for: .touchUpInside)
-    }
-    @objc func didTapActionButton(_ sender: UIButton) {}
 }

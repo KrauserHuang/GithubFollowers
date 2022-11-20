@@ -22,9 +22,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
          最後要使用makeKeyAndVisible來讓window顯示
          */
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
 //        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-        window = UIWindow(windowScene: windowScene)
 //        window?.windowScene = windowScene
+        
+        window = UIWindow(windowScene: windowScene)
         window?.rootViewController = GFTabBarController()
         window?.makeKeyAndVisible()
         

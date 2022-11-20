@@ -9,10 +9,10 @@ import UIKit
 
 class GFAlertVC: UIViewController {
     
-    let containerView = GFAlertView()
-    let titleLabel    = GFTitleLabel(textAlignment: .center, fontSize: 20)
-    let messageLabel  = GFBodyLabel(textAlignment: .center)
-    let actionButton  = GFButton(backgroundColor: .systemRed, title: "OK")
+    let containerView = GFAlertView()                                       //包覆內容的view
+    let titleLabel    = GFTitleLabel(textAlignment: .center, fontSize: 20)  //主旨文字
+    let messageLabel  = GFBodyLabel(textAlignment: .center)                 //內文文字
+    let actionButton  = GFButton(backgroundColor: .systemRed, title: "OK")  //按鈕
     
     var alertTitle: String?
     var message: String?
@@ -22,9 +22,9 @@ class GFAlertVC: UIViewController {
     
     init(alertTitle: String? = nil, message: String? = nil, buttonTitle: String? = nil) {
         super.init(nibName: nil, bundle: nil)
-        self.alertTitle = alertTitle
-        self.message = message
-        self.buttonTitle = buttonTitle
+        self.alertTitle     = alertTitle
+        self.message        = message
+        self.buttonTitle    = buttonTitle
     }
     
     required init?(coder: NSCoder) {

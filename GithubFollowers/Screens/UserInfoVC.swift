@@ -46,7 +46,6 @@ class UserInfoVC: UIViewController {
         NetworkManager.shared.getUserInfo(for: username) { result in
             switch result {
             case .success(let user):
-//                dump(user)
                 DispatchQueue.main.async {
                     self.configureUIElements(for: user)
                 }
@@ -92,40 +91,7 @@ class UserInfoVC: UIViewController {
             dateLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
     }
-    
-    private func addChild(from childVC: UIViewController, to containerView: UIView) {
-        /*
-         將第二個 VC 當做第一個 VC 的 children(通常作為客製化使用)
-         1. addChild
-         2. addChild's view
-         3. define it's(child.view) frame
-         4.
-         */
-        addChild(childVC)
-        containerView.addSubview(childVC.view)
-        childVC.view.frame = containerView.bounds
-        childVC.didMove(toParent: self)
-    }
 }
-
-//extension UserInfoVC: GFItemInfoVCDelegate {
-//    func didTapGithubProfile(for user: User) {
-//        guard let url = URL(string: user.htmlUrl) else {
-//            presentGFAlertOnMainThread(title: "Invalid URL", message: "The url attached to this user is invalid.", buttonTitle: "OK")
-//            return
-//        }
-//        openSafariVC(with: url)
-//    }
-//
-//    func didTapGetFollowers(for user: User) {
-//        guard user.followers != 0 else {
-//            presentGFAlertOnMainThread(title: "No followers", message: "This user has no followers. What a shame 😞.", buttonTitle: "So sad")
-//            return
-//        }
-//        delegate?.didRequestFollowers(for: user.login)
-//        dismissVC()
-//    }
-//}
 
 extension UserInfoVC: GFRepoItemVCDelegate {
     func didTapGithubProfile(for user: User) {

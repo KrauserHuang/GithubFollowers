@@ -30,13 +30,23 @@ class GFUserInfoHeaderVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        layoutUI()
         configureUIElements()
+        layoutUI()
+    }
+    
+    private func configureUIElements() {
+        avatarImageView.setImage(from: user.avatarUrl)
+        usernameLabel.text          = user.login
+        nameLabel.text              = user.name ?? ""
+        locationImageView.image     = SFSymbol.location
+        locationImageView.tintColor = .secondaryLabel
+        locationLabel.text          = user.location ?? "No location"
+        bioLabel.text               = user.bio ?? "No bio"
+        bioLabel.numberOfLines      = 3
     }
     
     private func layoutUI() {
         view.addSubviews(avatarImageView, usernameLabel, nameLabel, locationLabel, locationImageView, bioLabel)
-        
         let padding: CGFloat            = 20
         let textImagePadding: CGFloat   = 12
         locationImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -73,16 +83,5 @@ class GFUserInfoHeaderVC: UIViewController {
             bioLabel.trailingAnchor.constraint(equalTo: usernameLabel.trailingAnchor),
             bioLabel.heightAnchor.constraint(equalToConstant: 60)
         ])
-    }
-    
-    private func configureUIElements() {
-        avatarImageView.setImage(from: user.avatarUrl)
-        usernameLabel.text          = user.login
-        nameLabel.text              = user.name ?? ""
-        locationImageView.image     = SFSymbol.location
-        locationImageView.tintColor = .secondaryLabel
-        locationLabel.text          = user.location ?? "No location"
-        bioLabel.text               = user.bio ?? "No bio"
-        bioLabel.numberOfLines      = 3
     }
 }

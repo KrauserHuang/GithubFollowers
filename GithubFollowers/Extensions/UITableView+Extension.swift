@@ -8,7 +8,7 @@
 import UIKit
 
 extension UITableView {
-    func removeExcessCells() {
+    func removeExcessCells() { //移除 tableView 下面多餘空白 cell 的線
         tableFooterView = UIView(frame: .zero)
     }
 }

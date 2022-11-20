@@ -28,10 +28,10 @@ class GFButton: UIButton {
     }
     //設定這個客製化按鈕基本元素
     private func configure() {
-        translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius    = 10
-        setTitleColor(.white, for: .normal)
         titleLabel?.font      = UIFont.preferredFont(forTextStyle: .headline)
+        setTitleColor(.white, for: .normal)
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     func set(backgroundColor: UIColor, title: String) {

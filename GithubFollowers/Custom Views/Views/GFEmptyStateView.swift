@@ -9,8 +9,8 @@ import UIKit
 
 class GFEmptyStateView: UIView {
     
-    let titleLabel = GFTitleLabel(textAlignment: .center, fontSize: 28)
-    let imageView = UIImageView()
+    let titleLabel  = GFTitleLabel(textAlignment: .center, fontSize: 28)
+    let imageView   = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

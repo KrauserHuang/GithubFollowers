@@ -11,11 +11,9 @@ extension UICollectionViewFlowLayout {
     // MARK: - old way for collectionView layout
     func createThreeColumnFlowLayout(in view: UIView) {
         let width                       = view.bounds.width
-        
-        let padding: CGFloat            = 12 //外部間隔
-        let itemInterSpacing: CGFloat   = 10 //內部間距
-        let availableWidth              = width - (padding * 2) - (itemInterSpacing * 2) //item可使用長度
-        
+        let padding: CGFloat            = 12                                                //外部間隔
+        let itemInterSpacing: CGFloat   = 10                                                //內部間距
+        let availableWidth              = width - (padding * 2) - (itemInterSpacing * 2)    //item可使用長度
         let itemWidth                   = availableWidth / 3
         
         sectionInset                    = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)

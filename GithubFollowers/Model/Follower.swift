@@ -18,5 +18,4 @@ struct Follower: Codable {
     }
 }
 
-extension Follower: Hashable {
-}
+extension Follower: Hashable {}

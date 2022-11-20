@@ -8,33 +8,33 @@
 import UIKit
 
 enum SFSymbol {
-    static let location     = UIImage(systemName: "mappin.and.ellipse")
-    static let repos        = UIImage(systemName: "folder")
-    static let gists        = UIImage(systemName: "text.alignleft")
-    static let followers    = UIImage(systemName: "heart")
-    static let following    = UIImage(systemName: "person.2")
+    static let location                 = UIImage(systemName: "mappin.and.ellipse")
+    static let repos                    = UIImage(systemName: "folder")
+    static let gists                    = UIImage(systemName: "text.alignleft")
+    static let followers                = UIImage(systemName: "heart")
+    static let following                = UIImage(systemName: "person.2")
 }
 
 enum Images {
-    static let hgLogo           = UIImage(named: "gh-logo")
-    static let placeholder      = UIImage(named: "avatar-placeholder")
-    static let emptyStateLogo   = UIImage(named: "empty-state-logo")
+    static let hgLogo                   = UIImage(named: "gh-logo")
+    static let placeholder              = UIImage(named: "avatar-placeholder")
+    static let emptyStateLogo           = UIImage(named: "empty-state-logo")
 }
 
 enum ScreenSize {
-    static let width        = UIScreen.main.bounds.size.width
-    static let height       = UIScreen.main.bounds.size.height
-    static let maxLength    = max(ScreenSize.width, ScreenSize.height)
-    static let minLength    = min(ScreenSize.width, ScreenSize.height)
+    static let width                    = UIScreen.main.bounds.size.width
+    static let height                   = UIScreen.main.bounds.size.height
+    static let maxLength                = max(ScreenSize.width, ScreenSize.height)
+    static let minLength                = min(ScreenSize.width, ScreenSize.height)
 }
 
 enum DeviceTypes {
     /*
      UIScreen.main -> .main is deprecated in future 2022/11/17
      */
-    static let idiom        = UIDevice.current.userInterfaceIdiom   //拿來判斷機種類型(iPhone/iPad)
-    static let nativeScale  = UIScreen.main.nativeScale             //機種螢幕的比例
-    static let scale        = UIScreen.main.scale                   //自然之比例(?
+    static let idiom                    = UIDevice.current.userInterfaceIdiom   //拿來判斷機種類型(iPhone/iPad)
+    static let nativeScale              = UIScreen.main.nativeScale             //機種螢幕的比例
+    static let scale                    = UIScreen.main.scale                   //自然之比例(?
     
     static let isiPhoneSE               = idiom == .phone && ScreenSize.maxLength == 568.0
     static let isiPhone8Standard        = idiom == .phone && ScreenSize.maxLength == 667.0 && nativeScale == scale

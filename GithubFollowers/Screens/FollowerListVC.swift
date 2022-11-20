@@ -15,11 +15,11 @@ class FollowerListVC: UIViewController {
     
     var username: String!
     var collectionView: UICollectionView!
-    var page                = 1
-    var hasMoreFollowers    = true
-    var isSearching         = false
+    var page                        = 1
+    var hasMoreFollowers            = true
+    var isSearching                 = false
     var lastScrollPosition: CGFloat = 0
-    var isLoadingMoreFollower = false
+    var isLoadingMoreFollower       = false
     
     typealias DataSource = UICollectionViewDiffableDataSource<Section, Follower>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Follower>
@@ -64,7 +64,7 @@ class FollowerListVC: UIViewController {
     private func configureViewController() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
-        let addButton                      = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        let addButton                       = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
         navigationItem.rightBarButtonItem   = addButton
     }
     
@@ -81,13 +81,17 @@ class FollowerListVC: UIViewController {
     }
     
     private func configureCollectionView() {
+        
+        //使用 UICollectionViewFlowLayout
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.createThreeColumnFlowLayout(in: view)
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)
+        
+        //使用 CompositionalLayout
 //        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+        
         view.addSubview(collectionView)
         collectionView.delegate = self
-        collectionView.dataSource = dataSource
         collectionView.register(FollowerCell.self, forCellWithReuseIdentifier: FollowerCell.reuseIdentifier)
     }
     
@@ -102,20 +106,24 @@ class FollowerListVC: UIViewController {
             
             switch result {
             case .success(let followers):
-                if followers.count < 100 { self.hasMoreFollowers = false }
-                self.followers.append(contentsOf: followers)
-                if self.followers.isEmpty {
-                    DispatchQueue.main.async {
-                        self.showEmptyStateView(with: "This user doesn't have any followers. Go follow them 😀.",
-                                                in: self.view)
-                        self.navigationItem.searchController?.searchBar.isHidden = true
-                    }
-                }
+                self.updateUI(with: followers)
             case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Bad Stuff Happened", message: error.rawValue, buttonTitle: "OK")
             }
             
             self.isLoadingMoreFollower = false
+        }
+    }
+    
+    private func updateUI(with followers: [Follower]) {
+        if followers.count < 100 { self.hasMoreFollowers = false }  //當 followers 數量小於100，代表該使用者已經沒更多 followers
+        self.followers.append(contentsOf: followers)                // append(contentsOf:)可放 sequence
+        
+        if self.followers.isEmpty {
+            DispatchQueue.main.async {
+                self.showEmptyStateView(with: "This user doesn't have any followers. Go follow them 😀.", in: self.view)
+                self.navigationItem.searchController?.searchBar.isHidden = true
+            }
         }
     }
     
@@ -163,29 +171,34 @@ class FollowerListVC: UIViewController {
         NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
             guard let self = self else { return }
             self.hideLoadingView()
+            
             switch result {
             case .success(let user):
-                let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl) //將該名使用者轉成 Follower 型別(因為接下來要把他加進我的最愛)
-                
-                PersistenceManager.updateWith(favorite: favorite, actionType: .add) { [weak self] error in
-                    guard let self = self else { return }
-                    
-                    guard let error = error else {
-                        self.presentGFAlertOnMainThread(title: "Success!", message: "You have successfully favorited this user 🥳.", buttonTitle: "Hurray!")
-                        return
-                    }
-                    self.presentGFAlertOnMainThread(title: "Something went wrong...", message: error.rawValue, buttonTitle: "OK")
-                }
+                self.addUserToFavorites(with: user)
             case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Something went wrong...", message: error.rawValue, buttonTitle: "OK")
             }
+        }
+    }
+    
+    private func addUserToFavorites(with user: User) {
+        let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl) //將該名使用者轉成 Follower 型別(因為接下來要把他加進我的最愛)
+        
+        PersistenceManager.updateWith(favorite: favorite, actionType: .add) { [weak self] error in
+            guard let self = self else { return }
+            
+            guard let error = error else {
+                self.presentGFAlertOnMainThread(title: "Success!", message: "You have successfully favorited this user 🥳.", buttonTitle: "Hurray!")
+                return
+            }
+            self.presentGFAlertOnMainThread(title: "Something went wrong...", message: error.rawValue, buttonTitle: "OK")
         }
     }
 }
 // MARK: - CollectionView Delegate
 extension FollowerListVC: UICollectionViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard hasMoreFollowers, !isLoadingMoreFollower else { return }
+        guard hasMoreFollowers, !isLoadingMoreFollower else { return } //有更多使用者，並且不在載入中
         let offsetY         = scrollView.contentOffset.y
         let contentHeight   = scrollView.contentSize.height
         let height          = scrollView.frame.height
@@ -202,6 +215,7 @@ extension FollowerListVC: UICollectionViewDelegate {
             getFollowers(username: username, page: page)
         }
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         guard let follower = dataSource.itemIdentifier(for: indexPath) else { return }
@@ -214,13 +228,14 @@ extension FollowerListVC: UICollectionViewDelegate {
         present(navigationController, animated: true)
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {  //將停止的位置當作初始 y 座標
         lastScrollPosition = scrollView.contentOffset.y
     }
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {          //用來決定畫面是往上捲動或往下捲動
         if lastScrollPosition < scrollView.contentOffset.y {
             navigationItem.hidesSearchBarWhenScrolling = true
-        } else if lastScrollPosition > scrollView.contentOffset.y {
+        } else if lastScrollPosition > scrollView.contentOffset.y { //往上捲動，searchBar要顯示
             navigationItem.hidesSearchBarWhenScrolling = false
         }
     }
@@ -232,10 +247,10 @@ extension FollowerListVC: UISearchResultsUpdating {
         //從 searchBar 上的 text 去抓取要過濾的 followers，並且 searchBar 一定要輸入文字
         //這一段在你按下 searchBar 的 cancel 按鈕時也會執行
         guard let filter = searchController.searchBar.text?.lowercased(), !filter.isEmpty else {
-            updateSnapshot(on: followers, animated: true)
+            updateSnapshot(on: followers, animated: true)                   //點 cancel 被清空搜尋內容時，需要還原最初始 followers 內容
             return
         }
-        filteredFollowers = followers.filter { $0.login.contains(filter) } // didSet 將會直接執行 updateSnapshot
+        filteredFollowers = followers.filter { $0.login.contains(filter) }  // didSet 將會直接執行 updateSnapshot
     }
     
 //    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -252,6 +267,7 @@ extension FollowerListVC: UserInfoVCDelegate {
         self.username   = username
         title           = username
         page            = 1
+        
         followers.removeAll()
         filteredFollowers.removeAll()
 //        collectionView.setContentOffset(.zero, animated: true)
