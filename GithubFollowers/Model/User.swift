@@ -20,4 +20,5 @@ struct User: Codable {
     let followers: Int
     let following: Int
     let createdAt: Date // decoder 將轉成 iso8601
+//    let createdAt: String // decoder 將轉成 iso8601
 }

@@ -12,7 +12,7 @@ class GFAlertVC: UIViewController {
     let containerView = GFAlertView()                                       //包覆內容的view
     let titleLabel    = GFTitleLabel(textAlignment: .center, fontSize: 20)  //主旨文字
     let messageLabel  = GFBodyLabel(textAlignment: .center)                 //內文文字
-    let actionButton  = GFButton(backgroundColor: .systemRed, title: "OK")  //按鈕
+    let actionButton  = GFButton(backgroundColor: .systemRed, title: "OK", systemImageName: "checkmark.circle")  //按鈕
     
     var alertTitle: String?
     var message: String?

@@ -23,10 +23,16 @@ extension String {
     }
     
     func convertStringToDate() -> Date? { //如果會傳日期型別為 String，將其轉成Date
+        print(self)
+        print("============================")
         let dateFormatter           = DateFormatter()
-        dateFormatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.locale        = Locale(identifier: "en_US_POSIX")
+//        dateFormatter.dateFormat    = "yyyy-MM-dd'T'HH:mm:ssZ"
+        dateFormatter.dateFormat    = "yyyy/MM/dd HH:mm:ss"
+//        dateFormatter.locale        = Locale(identifier: "en_US_POSIX")
+        dateFormatter.locale        = .current
         dateFormatter.timeZone      = .current
+        print(dateFormatter.date(from: self))
+        print("============================")
         return dateFormatter.date(from: self)
     }
     

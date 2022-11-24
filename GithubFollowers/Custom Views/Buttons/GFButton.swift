@@ -21,21 +21,34 @@ class GFButton: UIButton {
     }
     //可設定背景色/文字的初始化動作
     // convenience initializer 的基本條件就是要先有 designated initializer，這裡是指 GFButton，所以遵從了 designated initializer 就可以使用他的屬性、方法(configure)
-    convenience init(backgroundColor: UIColor, title: String) {
+    convenience init(backgroundColor: UIColor, title: String, systemImageName: String) {
         self.init(frame: .zero)
-        self.backgroundColor = backgroundColor
-        self.setTitle(title, for: .normal)
+        set(color: backgroundColor, title: title, systemImageName: systemImageName)
     }
     //設定這個客製化按鈕基本元素
     private func configure() {
-        layer.cornerRadius    = 10
-        titleLabel?.font      = UIFont.preferredFont(forTextStyle: .headline)
-        setTitleColor(.white, for: .normal)
+//        layer.cornerRadius    = 10
+//        titleLabel?.font      = UIFont.preferredFont(forTextStyle: .headline)
+//        setTitleColor(.white, for: .normal)
+        
+        //======================= iOS15 =======================
+        configuration = .tinted()
+        configuration?.cornerStyle = .medium
+        
         translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func set(backgroundColor: UIColor, title: String) {
-        self.backgroundColor = backgroundColor
-        setTitle(title, for: .normal)
+    final func set(color: UIColor, title: String, systemImageName: String) {
+//        self.backgroundColor = backgroundColor
+//        setTitle(title, for: .normal)
+        
+        //======================= iOS15 =======================
+        configuration?.baseBackgroundColor = color
+        configuration?.baseForegroundColor = color
+        configuration?.title = title
+        
+        configuration?.image = UIImage(systemName: systemImageName)
+        configuration?.imagePadding = 6
+        configuration?.imagePlacement = .leading
     }
 }

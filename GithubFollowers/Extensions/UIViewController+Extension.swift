@@ -11,6 +11,7 @@ import SafariServices
 fileprivate var containerView: UIView!
 
 extension UIViewController {
+    
     func presentGFAlertOnMainThread(title: String, message: String, buttonTitle: String) { //在 UIViewController 顯示 Alert
         DispatchQueue.main.async {
             let alertVC = GFAlertVC(alertTitle: title, message: message, buttonTitle: buttonTitle)
@@ -20,6 +21,7 @@ extension UIViewController {
         }
     }
     
+    /// 你說這個嗎
     func showLoadingView() {                    //通常會放在 Networking 前，故不用特別放進 DispatchQueue
         containerView = UIView(frame: view.bounds)
         view.addSubview(containerView)
